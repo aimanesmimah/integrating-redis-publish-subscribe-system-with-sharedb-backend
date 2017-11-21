@@ -13,8 +13,8 @@ module.exports.initialize = function (server) {
     var wss = new WebSocket.Server({server: server});
     wss.on('connection', function(ws, req) {
         var stream = new WebSocketJsonStream(ws);
-        var id = ws.upgradeReq.headers['sec-websocket-key'];
-        console.log("websocket id : "  + id);
+        //var id = ws.upgradeReq.headers['sec-websocket-key'];
+        //console.log("websocket id : "  + id);
         ws.on('message',function (data) {
             var obj = JSON.parse(data);
         });
@@ -25,7 +25,7 @@ module.exports.initialize = function (server) {
     });
 
 
-
+    return share ;
 }
 
 module.exports.createDoc = function (backend) {
