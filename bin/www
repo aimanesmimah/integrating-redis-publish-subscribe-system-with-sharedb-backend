@@ -26,6 +26,7 @@ var server = http.createServer(app);
 var backend = sharedbConfig.initialize(server);
 
 sharedbConfig.createDoc(backend);
+sharedbConfig.initializeRedisPubSub(backend);
 
 
 

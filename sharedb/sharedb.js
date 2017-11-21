@@ -1,12 +1,17 @@
 var Sharedb = require('sharedb');
 var WebSocket = require('ws');
+var redis = require('redis');
+var ShareDBRedis = require('sharedb-redis-pubsub');
 var WebSocketJsonStream = require('websocket-json-stream');
 
 
 
 module.exports.initialize = function (server) {
     var share = new Sharedb({
-
+        pubsub : new ShareDBRedis({
+            client : redis.createClient(6379,'localhost'),
+            observer : redis.createClient(6379,'localhost')
+        })
     });
 
     // Connect any incoming WebSocket connection to ShareDB
@@ -38,5 +43,12 @@ module.exports.createDoc = function (backend) {
             return;
         }
         //callback();
+    });
+}
+
+module.exports.initializeRedisPubSub = function (backend) {
+    var sharePubSub = backend.pubsub ;
+    sharePubSub.observer.on("message",function (channel,msg) {
+        console.log(msg);
     });
 }
