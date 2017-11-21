@@ -3,6 +3,7 @@ var WebSocket = require('ws');
 var redis = require('redis');
 var ShareDBRedis = require('sharedb-redis-pubsub');
 var WebSocketJsonStream = require('websocket-json-stream');
+var redisStore = require('../redis/redis');
 
 
 
@@ -49,6 +50,9 @@ module.exports.createDoc = function (backend) {
 module.exports.initializeRedisPubSub = function (backend) {
     var sharePubSub = backend.pubsub ;
     sharePubSub.observer.on("message",function (channel,msg) {
-        console.log(msg);
+         console.log(msg);
+         redisStore.storeSharedbData(sharePubSub.client,JSON.parse(msg),function (err,opId) {
+             console.log(opId);
+         });
     });
 }
